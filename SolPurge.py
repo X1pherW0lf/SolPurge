@@ -7,7 +7,6 @@ def remove_empty_lines(text):
     non_empty_lines = [line for line in lines if line.strip() != '']
     
     result = '\n'.join(non_empty_lines)
-    
     return result
 
 def remove_comments(text):
@@ -17,12 +16,13 @@ def remove_comments(text):
         comment = match.group(0)
         if '@audit' in comment:
             return comment
+        elif 'SPDX-License-Identifier' in comment:
+            return comment            
         else:
             return ''
     
     cleaned_text = re.sub(pattern, filter_comments, text, flags=re.MULTILINE)
     result_text = remove_empty_lines(cleaned_text)
-    
     return result_text
 
 def process_file(file_path, input_dir, output_dir):
@@ -39,7 +39,6 @@ def process_file(file_path, input_dir, output_dir):
     
     with open(output_file, 'w') as f:
         f.write(cleaned_code)
-
 
 def process_directory(input_dir, output_dir):
     if not os.path.exists(output_dir):
